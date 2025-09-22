@@ -1,0 +1,333 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    /* border: 1px solid grey; */
+    font-family: Arial, Helvetica, sans-serif;
+    /* overflow: hidden; */
+}
+
+.hidden {
+    display: none !important;
+}
+
+div.hidden-op {
+    opacity: 0;
+    z-index: -1;
+}
+
+button {
+    font-weight: bold;
+}
+
+/* Main Container */
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background-color: white;
+    z-index: 1;
+}
+
+.container img {
+    width: 16rem;
+    height: 7rem;
+    margin-bottom: 15%;
+}
+
+.container .form {
+    display: flex;
+    width: 15rem;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    gap: .3em;
+}
+
+
+/* Responsive form*/
+@media screen and (min-width:480px) {
+    .container {
+        max-width: 700px;
+        height: 100vh;
+
+    }
+
+    .container img {
+        width: 25rem;
+        height: 11rem;
+        margin-bottom: 3%;
+    }
+
+    .container .form {
+        width: 16rem;
+    }
+}
+
+/* Responsive btn */
+@media screen and (max-width: 480px) {
+    div.container .btn {
+        flex-direction: column-reverse;
+        justify-content: center;
+        gap: .3em;
+    }
+}
+
+
+/* Form & Button */
+.container .form input, select {
+    background-color: brown;
+    border: 2px solid black;
+    border-radius: 5px;
+    height: 2.4em;
+    padding: .4em;
+    color: white;
+}
+
+.container .form select {
+    cursor: pointer;
+}
+
+.container .form input::placeholder {
+    color: rgba(255, 255, 255, 0.655);
+}
+
+.container .btn {
+    display: flex;
+    justify-content: space-between;
+    border: 0;
+}
+
+.container .btn button {
+    padding: .4em 2em;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+    transition: all .15s ease-in-out;
+}
+
+.container .btn button:disabled {
+    background: #45454580;
+    cursor: not-allowed;
+    transition: all .15s ease-in-out;
+}
+
+/* Instruction */
+.instruction-container {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transition: all .3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    user-select: none;
+    cursor: default;
+    opacity: 1;
+    z-index: 999;
+}
+
+.instruction {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 3em 3em 7em 3em;
+    font-size: 115%;
+    border-radius: 4px;
+}
+
+.instruction #close-instruction {
+    position: absolute;
+    right: .5em;
+    top: .5em;
+    padding: .3em .6em;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.instruction h2 {
+    line-height: 2em;
+}
+
+.instruction p {
+    line-height: 1.5em;
+}
+
+
+/* Responsive Instruction */
+@media screen and (max-width: 480px) {
+    .instruction {
+        padding: 1em 1em 4em 1em;
+        margin: 0 1%;
+    }
+}
+
+
+/* Pause screen */
+.pause-screen {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.row-btn {
+    display: flex;
+    flex-direction: row;
+    gap: 1.2em;
+}
+
+.pause-screen h1 {
+    line-height: 2.5em;
+    color: white;
+}
+.row-btn button {
+    color: white;
+    padding: .4em 2em;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer ;
+}
+
+.row-btn button:first-child {
+    background-color: brown;
+}
+
+.row-btn button:last-child {
+    background-color: #2a63a5;
+}
+
+
+/* Countdown */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.overlay .count {
+    font-size: 7em;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 20px black;
+}
+
+
+/* Game */
+.hud {
+    height: 100vh;
+    width: 25vw;
+    background-color: #2a2a2a;
+    color: white;
+    border-left: 1px solid #4b4b4b;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5em;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.game-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+main {
+    height: 100vh;
+    width: 75vw;
+    overflow: auto;
+    display: flex;
+    background-color: #2a2a2a;
+}
+
+canvas {
+    background-image: url(Images/background.jpg);
+    background-size: cover;
+    /*background fleksibel menyesuaikan element*/
+    /* width: 770px;
+    height: 630px; */
+    margin: auto;
+}
+
+.row-hud img {
+    width: 2em;
+    display: inline-block;
+}
+
+div.column {
+    flex-direction: column;
+}
+
+.row-hud {
+    display: flex;
+    flex-direction: row;
+    line-height: 1.2em;
+    margin-bottom: .7em;
+}
+
+.row-hud.item div {
+    display: flex;
+    align-items: center;
+    margin-left: .4em;
+
+}
+
+.white-logo {
+    margin-bottom: 1.6em;
+}
+
+
+
+.score {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+}
+
+.gameover-screen {
+    color: white;
+    font-weight: bold;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5em;
+}
+
+.gray-bg {
+    background-color: #2a2a2a;
+}

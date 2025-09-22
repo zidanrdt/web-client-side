@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomb Skuy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app">
+        <!-- Welcome screen -->
+        <div class="container" id="screen-container">
+            <div class="screen">
+                <img src="Images/logo.png" alt="Bomb Skuy">
+                <form action="" class="form">
+                    <input type="text" name="username" placeholder="username" id="input-name">
+                    <select name="difficulty" id="input-difficulty">
+                        <option value="" disabled selected hidden>Select Difficulty</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+
+                    <div class="btn">
+                        <button id="play" type="button">Play</button>
+                        <button id="open-instruction" type="button">Instruction</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Instruction -->
+            <div id="instruction-container" class="instruction-container hidden-op">
+                <div class="instruction">
+                    <button id="close-instruction">X</button>
+                    <h2>How To Play Game</h2>
+                    <p>1. Input Username </p>
+                    <p>2. Put The Bomb</p>
+                    <p>3. Blow up as many wails as possible</p>
+                    <p>4. Blow up enemies</p>
+                    <p>5. Enjoy</p>
+                </div>
+            </div>
+
+            <!-- Countdown overlay  -->
+            <div id="overlay-countdown" class="overlay hidden">
+                <div class="count" id="count"></div>
+            </div>
+
+        </div>
+
+        <div class="game-container hidden" id="game-container">
+            <header id="hud" class="hud">
+                <img src="Images/logo_white.png" alt="Bomb Skuy logo" class="row-hud white-logo">
+                <div class="row-hud column">
+                    <div>Player : <span id="player-name1"></span></div>
+                    <div>Time : <span id="minute1">00</span> : <span id="second1">00</span></div>
+                </div>
+                <div class="hearts row-hud" id="hearts"></div>
+                <div class="row-hud item">
+                    <img src="Images/wall_crack.png" alt="">
+                    <div> = <div id="stat-walls">0</div></div>
+                </div>
+                <div class="row-hud item">
+                    <img src="Images/tnt.png" alt="">
+                    <div> = <div id="stat-tnt">0</div></div>
+                </div>
+                <div class="row-hud item">
+                    <img src="Images/ice.png" alt="">
+                    <div> = <div id="stat-ice">0</div></div>
+                </div>
+            </header>
+
+            <main id="game-wrap" class="game-wrap">
+                <canvas id="gameCanvas"></canvas>
+            </main>
+        </div>
+
+        <div id="pause-screen" class="pause-screen hidden">
+            <h1>GAME PAUSED</h1>
+            <div class="row-btn">
+                <button id="quit-btn" type="button">Quit Game</button>
+                <button id="resume-btn" type="button">Resume</button>
+            </div>
+        </div>
+
+        <div id="gameover-screen" class="gameover-screen gray-bg hidden">
+            <h1>Game Over!</h1>
+            <p>Good Job <span id="player-name2"></span> your time <span id="minute2">00</span> : <span id="second2">00</span> result :</p>
+            <div class="score">
+                <div class="row-hud item">
+                    <img src="Images/wall_crack.png" alt="">
+                    <div> = <div id="stat-walls">0</div></div>
+                </div>
+                <div class="row-hud item">
+                    <img src="Images/tnt.png" alt="">
+                    <div> = <div id="stat-tnt">0</div></div>
+                </div>
+                <div class="row-hud item">
+                    <img src="Images/ice.png" alt="">
+                    <div> = <div id="stat-ice">0</div></div>
+                </div>
+            </div>
+            <div class="row-btn">
+                <button id="save-btn">Save Score</button>
+                <button id="leaderboard-btn">Leaderboard</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
