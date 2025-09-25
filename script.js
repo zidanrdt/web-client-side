@@ -54,6 +54,7 @@ const SPRITES = {
     left: 'images/char_left.png',
     right: 'images/char_right.png',
   },
+  
   dog: {
     up: 'images/dog_up.png',
     down: 'images/dog_down.png',
