@@ -272,7 +272,7 @@ main {
 }
 
 canvas {
-    background-image: url(images/background.jpg);
+    background-image: url(tes/background.jpg);
     background-size: cover;
     /*background fleksibel menyesuaikan element*/
     /* width: 770px;
