@@ -211,12 +211,17 @@ const map = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
-
+let keyPressed = {};
 document.addEventListener("keydown", (e) => {
   if (!gameStarted) return;
 
   let newRow = player.row;
   let newCol = player.col;
+
+  // if (e.repeat) return;
+
+  if (keyPressed[e.key]) return;
+  keyPressed[e.key] = true;
 
   if (e.key === "Escape") {
     togglePause();
@@ -239,7 +244,7 @@ document.addEventListener("keydown", (e) => {
       player.dir = "right";
     }
   }
-  // Agar tidak bisa melewati wall solid
+
   if (map[newRow][newCol] === 0) {
     player.row = newRow;
     player.col = newCol;
@@ -248,6 +253,11 @@ document.addEventListener("keydown", (e) => {
   if (isPaused) return;
   render();
 });
+
+document.addEventListener("keyup", (e) => {
+  keyPressed[e.key] = false;
+});
+
 
 // Countdown
 btnPlay.addEventListener("click", () => {
