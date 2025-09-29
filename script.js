@@ -39,9 +39,9 @@ canvas.width = COLS * TILE;
 canvas.height = ROWS * TILE;
 
 const SPRITES = {
-  wallSolid: 'images/wall_solid.jpg',
   wallBreak: 'images/wall.png',
   bomb: 'images/bomb.png',
+  explosion : 'images/explosion.png',
   tnt: 'images/tnt.png',
   ice: 'images/ice.png',
   heartUI: 'images/heart_indicator2.png',
@@ -77,6 +77,8 @@ const IMGS = {
     right: loadImage(SPRITES.player.right),
   },
   wallBreak: loadImage(SPRITES.wallBreak),
+  bomb: loadImage(SPRITES.bomb), 
+  explosion: loadImage(SPRITES.explosion),
 };
 
 // Posisi awal player
@@ -119,7 +121,7 @@ function generateBreakWalls() {
 
         } else {
           // 30% peluang jadi 2
-          if (Math.random() < 0.65) {
+          if (Math.random() < 0.7) {
             map[r][c] = 2;
           }
         }
@@ -128,10 +130,97 @@ function generateBreakWalls() {
   }
 }
 
+// == Bomb Place ==
+let bombs = [];
+const BOMB_TIMER = 3000;
+const EXPLOSION_DURATION = 500; // ledakan terlihat 0.5 detik
+
+function drawBombs() {
+  bombs.forEach(b => {
+    // Kalau belum meledak → gambar bom
+    if (!b.exploded) {
+      ctx.drawImage(IMGS.bomb, b.col * TILE, b.row * TILE, TILE, TILE);
+    } else {
+      b.explosionArea.forEach(pos => {
+        ctx.drawImage(IMGS.explosion, pos.col * TILE, pos.row * TILE, TILE, TILE);
+      });
+    }
+  });
+}
+
+function placeBomb() {
+  const existingBomb = bombs.find(b => b.row === player.row && b.col === player.col && !b.exploded);
+  if (existingBomb) return; // cegah spam di blok yg sama
+
+  let bomb = {
+    row: player.row,
+    col: player.col,
+    placedAt: Date.now(),
+    exploded: false,
+    explosionArea: [] // akan diisi ketika meledak
+  };
+  bombs.push(bomb);
+
+  setTimeout(() => {
+    explodeBomb(bomb);
+  }, BOMB_TIMER);
+}
+
+function explodeBomb(bomb) {
+  bomb.exploded = true;
+
+  let explosionArea = [];
+
+  // posisi bom selalu kena
+  explosionArea.push({ row: bomb.row, col: bomb.col });
+
+  // cek 4 arah
+  let dirs = [
+    { r: -1, c: 0 }, // atas
+    { r: 1, c: 0 },  // bawah
+    { r: 0, c: -1 }, // kiri
+    { r: 0, c: 1 }   // kanan
+  ];
+
+  dirs.forEach(d => {
+    let nr = bomb.row + d.r;
+    let nc = bomb.col + d.c;
+
+    if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+      if (map[nr][nc] === 1) {
+        // solid wall, stop ledakan
+        return;
+      } else if (map[nr][nc] === 2) {
+        // wallBreak hancur
+        map[nr][nc] = 0;
+        explosionArea.push({ row: nr, col: nc });
+      } else if (map[nr][nc] === 0) {
+        // tile kosong tetap dapat ledakan
+        explosionArea.push({ row: nr, col: nc });
+      }
+    }
+  });
+
+  bomb.explosionArea = explosionArea;
+
+  setTimeout(() => {
+    bombs = bombs.filter(b => b !== bomb);
+  }, EXPLOSION_DURATION);
+}
+
 function render() {
   drawGrid();
   Player();
+  drawBombs();
 }
+
+function gameLoop() {
+  if (gameStarted && !isPaused) {
+    render();
+  }
+  requestAnimationFrame(gameLoop);
+}
+gameLoop();
 
 function updateButton() {
   userName = inputName.value.trim();
@@ -268,6 +357,9 @@ document.addEventListener("keydown", (e) => {
       newCol++;
       player.dir = "right";
     }
+    else if (e.key === " ") {
+      placeBomb();
+    }
   }
 
   if (map[newRow][newCol] === 0) {
@@ -276,7 +368,6 @@ document.addEventListener("keydown", (e) => {
   }
 
   if (isPaused) return;
-  render();
 });
 
 document.addEventListener("keyup", (e) => {
@@ -304,7 +395,6 @@ btnPlay.addEventListener("click", () => {
     }
   }, 1000);
 });
-
 
 function startGame() {
   generateBreakWalls();
