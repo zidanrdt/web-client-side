@@ -54,7 +54,7 @@ const SPRITES = {
     left: 'images/char_left.png',
     right: 'images/char_right.png',
   },
-  
+
   dog: {
     up: 'images/dog_up.png',
     down: 'images/dog_down.png',
@@ -75,7 +75,8 @@ const IMGS = {
     down: loadImage(SPRITES.player.down),
     left: loadImage(SPRITES.player.left),
     right: loadImage(SPRITES.player.right),
-  }
+  },
+  wallBreak: loadImage(SPRITES.wallBreak),
 };
 
 // Posisi awal player
@@ -91,6 +92,12 @@ function drawGrid() {
 
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
+      let x = c * TILE;
+      let y = r * TILE;
+
+      if (map[r][c] === 2) {
+        ctx.drawImage(IMGS.wallBreak, x, y, TILE, TILE);
+      }
     }
   }
 }
@@ -101,6 +108,24 @@ function Player() {
   const y = player.row * TILE;
   const sprite = IMGS.player[player.dir];
   ctx.drawImage(sprite, x, y, TILE, TILE);
+}
+
+// Random Wall
+function generateBreakWalls() {
+  for (let r = 1; r < ROWS - 1; r++) {
+    for (let c = 1; c < COLS - 1; c++) {
+      if (map[r][c] === 0) {
+        if ((r === 1 && c === 1) || (r === 1 && c === 2) || (r === 2 && c === 1)) {
+
+        } else {
+          // 30% peluang jadi 2
+          if (Math.random() < 0.65) {
+            map[r][c] = 2;
+          }
+        }
+      }
+    }
+  }
 }
 
 function render() {
@@ -144,10 +169,10 @@ function startTimer() {
       document.getElementById("minute1").textContent = minuteText;
       document.getElementById("second1").textContent = secondText;
 
-      if (totalTime == 15) {
-        gameStarted = false;
-        console.log("Game Over! Timer berhenti.");
-      }
+      // if (totalTime == 15) {
+      //   gameStarted = false;
+      //   console.log("Game Over! Timer berhenti.");
+      // }
     }
 
     if (!gameStarted) {
@@ -199,7 +224,7 @@ quitBtn.addEventListener("click", () => {
   player.dir = "down";
 });
 
-const map = [
+let map = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
   [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -282,13 +307,12 @@ btnPlay.addEventListener("click", () => {
 
 
 function startGame() {
-  render()
+  generateBreakWalls();
+  render();
   screenContainer.classList.add('hidden');
   gameContainer.classList.remove('hidden');
   totalTime = 0;
   gameStarted = true;
   startTimer();
-
 }
-
 
