@@ -281,7 +281,7 @@ canvas {
 }
 
 .row-hud img {
-    width: 2em;
+    width: 2.5em;
     display: inline-block;
 }
 
@@ -301,6 +301,10 @@ div.column {
     align-items: center;
     margin-left: .4em;
 
+}
+
+div.row-hud.hearts {
+    gap: .4em;
 }
 
 .white-logo {

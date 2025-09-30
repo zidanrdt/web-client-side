@@ -110,6 +110,14 @@ function Player() {
   const x = player.col * TILE;
   const y = player.row * TILE;
   const sprite = IMGS.player[player.dir];
+
+  if (isDamaged) {
+    // Efek kedip (50% chance tidak digambar)
+    if (Math.floor(Date.now() / 100) % 2 === 0) {
+      return; // jangan gambar → player invisible frame
+    }
+  }
+
   ctx.drawImage(sprite, x, y, TILE, TILE);
 }
 
@@ -135,6 +143,8 @@ function generateBreakWalls() {
 let bombs = [];
 const BOMB_TIMER = 3000;
 const EXPLOSION_DURATION = 500;
+let isDamaged = false;
+let damageTimer = null;
 
 function drawBombs() {
   bombs.forEach(b => {
@@ -209,8 +219,17 @@ function explodeBomb(bomb) {
     hearts -= 1;
     renderHearts();
 
+    // Aktifkan animasi kedip
+    isDamaged = true;
+    clearTimeout(damageTimer);
+    damageTimer = setTimeout(() => {
+      isDamaged = false; // selesai kedip setelah 1.5 detik
+    }, 1500);
+
     if (hearts <= 0) {
-      gameStarted = false; // game over
+      setTimeout(() => {
+        gameStarted = false;
+      }, EXPLOSION_DURATION); // sama dengan durasi ledakan
     }
   }
 
