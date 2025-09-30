@@ -41,7 +41,7 @@ canvas.height = ROWS * TILE;
 const SPRITES = {
   wallBreak: 'images/wall.png',
   bomb: 'images/bomb.png',
-  explosion : 'images/explosion.png',
+  explosion: 'images/explosion.png',
   tnt: 'images/tnt.png',
   ice: 'images/ice.png',
   heartUI: 'images/heart_indicator2.png',
@@ -77,9 +77,10 @@ const IMGS = {
     right: loadImage(SPRITES.player.right),
   },
   wallBreak: loadImage(SPRITES.wallBreak),
-  bomb: loadImage(SPRITES.bomb), 
+  bomb: loadImage(SPRITES.bomb),
   explosion: loadImage(SPRITES.explosion),
 };
+
 
 // Posisi awal player
 let player = {
@@ -121,7 +122,7 @@ function generateBreakWalls() {
 
         } else {
           // 30% peluang jadi 2
-          if (Math.random() < 0.7) {
+          if (Math.random() < 0.6) {
             map[r][c] = 2;
           }
         }
@@ -130,10 +131,10 @@ function generateBreakWalls() {
   }
 }
 
-// == Bomb Place ==
+// === Bomb Place ===
 let bombs = [];
 const BOMB_TIMER = 3000;
-const EXPLOSION_DURATION = 500; // ledakan terlihat 0.5 detik
+const EXPLOSION_DURATION = 500;
 
 function drawBombs() {
   bombs.forEach(b => {
@@ -203,15 +204,50 @@ function explodeBomb(bomb) {
 
   bomb.explosionArea = explosionArea;
 
+  // Cek kalau player kena bom
+  if (isPlayerHit(bomb)) {
+    hearts -= 1;
+    renderHearts();
+
+    if (hearts <= 0) {
+      gameStarted = false; // game over
+    }
+  }
+
+
   setTimeout(() => {
     bombs = bombs.filter(b => b !== bomb);
   }, EXPLOSION_DURATION);
 }
 
+
+// == HEART SYSTEM ==
+let hearts = 3;
+function renderHearts() {
+  const heartsContainer = document.getElementById("hearts");
+  heartsContainer.innerHTML = ""; // reset dulu
+
+  for (let i = 0; i < hearts; i++) {
+    const img = document.createElement("img");
+    img.src = SPRITES.heartUI;
+    img.classList.add("heart-icon");
+    img.style.width = "40px";
+    img.style.height = "40px";
+    img.style.marginRight = "5px";
+    heartsContainer.appendChild(img);
+  }
+}
+
+function isPlayerHit(bomb) {
+  return bomb.explosionArea.some(pos => pos.row === player.row && pos.col === player.col);
+}
+
+
 function render() {
   drawGrid();
   Player();
   drawBombs();
+  renderHearts();
 }
 
 function gameLoop() {
@@ -291,6 +327,7 @@ function saveTime(timeInSeconds) {
 
   document.getElementById("result").textContent = "Waktu terakhir: " + formatted;
 }
+
 
 inputName.addEventListener('input', updateButton);
 inputDifficulty.addEventListener('change', updateButton);
@@ -397,6 +434,8 @@ btnPlay.addEventListener("click", () => {
 });
 
 function startGame() {
+  hearts = 3;
+  renderHearts();
   generateBreakWalls();
   render();
   screenContainer.classList.add('hidden');
