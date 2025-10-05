@@ -291,16 +291,15 @@ div.column {
 
 .row-hud {
     display: flex;
-    flex-direction: row;
     line-height: 1.2em;
-    margin-bottom: .7em;
+    margin-bottom: 1em;
 }
 
 .row-hud.item div {
     display: flex;
     align-items: center;
     margin-left: .4em;
-
+    font-size: 1.25em;
 }
 
 div.row-hud.hearts {
@@ -315,7 +314,6 @@ div.row-hud.hearts {
 
 .score {
     display: flex;
-    flex-direction: row;
     gap: 2em;
 }
 

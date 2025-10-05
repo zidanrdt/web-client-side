@@ -13,6 +13,7 @@ const inputName = document.getElementById('input-name');
 const inputDifficulty = document.getElementById('input-difficulty');
 const playerName1 = document.getElementById('player-name1');
 const playerName2 = document.getElementById('player-name2');
+const statWalls = document.querySelectorAll(".stat-walls");
 
 const pauseScreen = document.getElementById("pause-screen");
 const resumeBtn = document.getElementById("resume-btn");
@@ -145,6 +146,7 @@ const BOMB_TIMER = 3000;
 const EXPLOSION_DURATION = 500;
 let isDamaged = false;
 let damageTimer = null;
+let wallsDestroyed = 0;
 
 function drawBombs() {
   bombs.forEach(b => {
@@ -199,14 +201,15 @@ function explodeBomb(bomb) {
 
     if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
       if (map[nr][nc] === 1) {
-        // solid wall, stop ledakan
         return;
       } else if (map[nr][nc] === 2) {
         // wallBreak hancur
         map[nr][nc] = 0;
+        wallsDestroyed++;
+        statWalls.forEach(el => el.textContent = wallsDestroyed);
         explosionArea.push({ row: nr, col: nc });
       } else if (map[nr][nc] === 0) {
-        // tile kosong tetap dapat ledakan
+        // tile kosong tetap dapat efek ledakan
         explosionArea.push({ row: nr, col: nc });
       }
     }
@@ -214,7 +217,7 @@ function explodeBomb(bomb) {
 
   bomb.explosionArea = explosionArea;
 
-  // Cek kalau player kena bom
+  // Cek player kena bom
   if (isPlayerHit(bomb)) {
     hearts -= 1;
     renderHearts();
@@ -223,13 +226,13 @@ function explodeBomb(bomb) {
     isDamaged = true;
     clearTimeout(damageTimer);
     damageTimer = setTimeout(() => {
-      isDamaged = false; // selesai kedip setelah 1.5 detik
+      isDamaged = false;
     }, 1500);
 
     if (hearts <= 0) {
       setTimeout(() => {
         gameStarted = false;
-      }, EXPLOSION_DURATION); // sama dengan durasi ledakan
+      }, EXPLOSION_DURATION);
     }
   }
 
@@ -454,6 +457,7 @@ btnPlay.addEventListener("click", () => {
 
 function startGame() {
   hearts = 3;
+  wallsDestroyed = 0;
   renderHearts();
   generateBreakWalls();
   render();
