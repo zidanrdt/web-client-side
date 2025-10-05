@@ -2,7 +2,6 @@ const openBtn = document.getElementById("open-instruction");
 const closeBtn = document.getElementById("close-instruction");
 const instruction = document.getElementById("instruction-container");
 const btnPlay = document.getElementById("play");
-
 const overlayCountdown = document.getElementById("overlay-countdown");
 const countdownCount = overlayCountdown.querySelector(".count");
 
@@ -11,8 +10,7 @@ const gameContainer = document.getElementById('game-container');
 
 const inputName = document.getElementById('input-name');
 const inputDifficulty = document.getElementById('input-difficulty');
-const playerName1 = document.getElementById('player-name1');
-const playerName2 = document.getElementById('player-name2');
+const playerName = document.querySelectorAll('.player-name');
 const statWalls = document.querySelectorAll(".stat-walls");
 
 const pauseScreen = document.getElementById("pause-screen");
@@ -170,7 +168,7 @@ function placeBomb() {
     col: player.col,
     placedAt: Date.now(),
     exploded: false,
-    explosionArea: [] // akan diisi ketika meledak
+    explosionArea: []
   };
   bombs.push(bomb);
 
@@ -247,7 +245,7 @@ function explodeBomb(bomb) {
 let hearts = 3;
 function renderHearts() {
   const heartsContainer = document.getElementById("hearts");
-  heartsContainer.innerHTML = ""; // reset dulu
+  heartsContainer.innerHTML = "";
 
   for (let i = 0; i < hearts; i++) {
     const img = document.createElement("img");
@@ -315,11 +313,6 @@ function startTimer() {
       secondText = String(seconds).padStart(2, "0");
       document.getElementById("minute1").textContent = minuteText;
       document.getElementById("second1").textContent = secondText;
-
-      // if (totalTime == 15) {
-      //   gameStarted = false;
-      //   console.log("Game Over! Timer berhenti.");
-      // }
     }
 
     if (!gameStarted) {
@@ -329,7 +322,6 @@ function startTimer() {
       gameoverScreen.classList.remove('hidden');
       document.getElementById("minute2").textContent = minuteText;
       document.getElementById("second2").textContent = secondText;
-      // showLeaderboard();
       return;
     }
 
@@ -436,8 +428,7 @@ document.addEventListener("keyup", (e) => {
 
 // Countdown
 btnPlay.addEventListener("click", () => {
-  playerName1.textContent = userName;
-  playerName2.textContent = userName;
+  playerName.forEach(el => el.textContent = userName);
   overlayCountdown.classList.remove('hidden')
 
   let i = 3;
